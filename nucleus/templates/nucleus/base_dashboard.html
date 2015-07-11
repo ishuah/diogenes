@@ -1,0 +1,41 @@
+{% extends "nucleus/base.html" %}
+{%block content%}
+	<nav class="uk-navbar">
+		<a class="uk-navbar-brand" href="/dashboard/">Diogenes</a>
+		<div class="uk-navbar-content">
+			<a class="uk-button uk-button-primary" href="/dashboard/"><i class="uk-icon-list"></i> List People</a>
+			<a class="uk-button uk-button-primary" href="/dashboard/add-person-profile/"><i class="uk-icon-plus"></i> Add Person</a>
+			
+		</div>
+		
+		<div class="uk-navbar-content uk-navbar-flip  uk-hidden-small">
+			<strong>{{user.username}}</strong>
+			<a href="/logout/" class="uk-button uk-button-small uk-button-danger"><i class="uk-icon-sign-out"></i> Logout</a>
+			
+		</div>
+	</nav>
+	<div class="uk-container uk-margin-top uk-container-center">
+		{% if messages %}
+			{% for message in messages %}
+				{% if message.tags == 'success' %}
+					<div class="uk-alert uk-alert-success">
+						<a href="" class="uk-alert-close uk-close"></a>
+						{{ message }}
+					</div>
+				{% elif message.tags == 'warning' %}
+					<div class="uk-alert uk-alert-warning">
+						<a href="" class="uk-alert-close uk-close"></a>
+						{{ message }}
+					</div>
+				{% elif message.tags == 'error' %}
+					<div class="uk-alert uk-alert-danger">
+						<a href="" class="uk-alert-close uk-close"></a>
+						{{ message }}
+					</div>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		{% block dashcontent %}
+		{% endblock %}
+	</div>
+{%endblock%}

@@ -1,0 +1,36 @@
+{% extends "nucleus/base_dashboard.html" %}
+
+{% block dashcontent %}
+	<div class="uk-grid">
+		<div class="uk-width-1-2 uk-overflow-container">
+			<h2>Profiles ({{ people.count}})</h2>
+			{% if people %}
+				{% for person in people %}
+
+					<div class="uk-panel uk-panel-hover">
+						{% if person.status == 'unexplored' %}
+							<div class="uk-panel-badge uk-badge uk-badge-danger">{{person.status}}</div>
+						{% elif person.status == 'unrefined' %}
+							<div class="uk-panel-badge uk-badge uk-badge-warning">{{person.status}}</div>
+						{% else %}
+							<div class="uk-panel-badge uk-badge uk-badge-success">{{person.status}}</div>
+						{% endif %}
+						
+						<h3 class="uk-panel-title"><a href="/dashboard/view/{{person.pk}}">{{ person.name }}</a></h3>
+
+						{% if person.short_description %}
+							<i>{{ person.short_description }}</i>
+						{% else %}
+							<i>No short description</i>
+						{% endif %}
+						<a href="delete/{{person.pk}}" class="uk-float-right uk-button-mini uk-button-danger"><i class="uk-icon-remove"> delete</i></a>
+					</div>
+					
+				{% endfor %}
+			{% endif %}
+		</div>
+		<div class="uk-width-1-2">
+			
+		</div>
+	</div>
+{% endblock %}

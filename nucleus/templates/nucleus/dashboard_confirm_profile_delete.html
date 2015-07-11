@@ -1,0 +1,19 @@
+{% extends "nucleus/base_dashboard.html" %}
+
+{% block dashcontent %}
+	<div class="uk-vertical-align uk-text-center uk-height-1-1 uk-width-1-1">
+		<h3>Confirm</h3>
+		<h4>Are you sure you want to delete the profile {{ person.name }}?</h4>
+		<form class=" uk-form" method="post" action="">
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
+			<div class="uk-form-row">
+                <button class="uk-width-1-4 uk-button uk-button-danger uk-button-large">Confirm</button>
+            </div>
+            <div class="uk-form-row">
+            	<a href="/dashboard/" class="uk-width-1-4 uk-button uk-button-primary uk-button-large">Cancel</a>
+            </div>
+		</form>
+		
+	</div>
+	
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "nucleus/base_dashboard.html" %}
+
+{% block dashcontent %}
+	<div class="uk-vertical-align uk-height-1-1 uk-width-1-1">
+		<article class="uk-article">
+	    	<h1 class="uk-article-title">View Profile - {{person.name}}</h1>
+	    	<p class="uk-article-meta"></p>
+	    	<p class="uk-article-lead">{{ person.short_description }}</p>
+	    
+	   		{% if person.status == 'unexplored' %}
+	   			<p class="uk-article-lead">{{person.name}}'s profile does not have raw data.</p>
+	   			<a href="/dashboard/profile_search/{{ person.pk }}/" class="uk-button uk-button-large uk-button-primary">Collect {{person.name}}'s raw data</a>
+	   		{% endif %}
+	   		{% if raw_data %}
+	   			<div class="uk-block">
+		   				<div class="uk-container">
+		   					{% for item in raw_data.items %}
+		   						<div class="uk-panel uk-panel-hover">
+		   						<h3 class="uk-panel-title"><a href="{{item.link}}" target="_blank">{{item.link}}</a></h3>
+		   						<h4>{{item.snippet}}</h4>
+		   						</div>
+		   					{% endfor %}
+		   				</div>
+	   			</div>
+	   		{% endif %}
+		</article>
+		
+	</div>
+	
+{% endblock %}
