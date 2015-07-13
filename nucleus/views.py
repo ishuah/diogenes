@@ -9,7 +9,7 @@ import urllib, requests, json
 @login_required(login_url='/login/')
 def dashboard(request):
 	people = Person.objects.all()
-	return render(request, 'nucleus/dashboard_list_profiles.html', {'people': people})
+	return render(request, 'nucleus/base_dashboard.html', {'people': people})
 
 @login_required(login_url='/login/')
 def add_person_profile(request):
