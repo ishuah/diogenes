@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import HttpResponse
 from nucleus.models import Person
 from nucleus.tasks import *
 import urllib, requests, json
@@ -15,7 +16,6 @@ def dashboard(request):
 def add_person_profile(request):
 	if request.method == "POST":
 		Person.objects.create(name=request.POST.get("name"), short_description=request.POST.get("short_description"))
-		messages.success(request, 'New person added successfully.')
 		return render(request, 'nucleus/dashboard_new_profile.html')
 	return render(request, 'nucleus/dashboard_new_profile.html')
 
@@ -39,5 +39,5 @@ def view_profile(request, profileId):
 @login_required(login_url='/login/')
 def profile_search(request, profileId):
 	async_data_scrape.apply_async((profileId,))
-	return redirect('view', profileId=profileId)
+	return HttpResponse(status=200)
 

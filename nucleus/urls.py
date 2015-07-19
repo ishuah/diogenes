@@ -1,5 +1,10 @@
 from django.conf.urls import include, url
 from django.views.generic import RedirectView
+from tastypie.api import Api
+from resources import PersonResource
+
+v1_api = Api(api_name='v1')
+v1_api.register(PersonResource())
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/dashboard/')),
@@ -10,4 +15,5 @@ urlpatterns = [
     url(r'^dashboard/profile_search/(?P<profileId>[\d\w]{0,50})/$', 'nucleus.views.profile_search', name='search'),
     url(r'^login/', 'django.contrib.auth.views.login', {'template_name': 'nucleus/login.html'}, name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout', {'template_name': 'nucleus/login.html'}, name='logout'),
+    url(r'^api/', include(v1_api.urls)),
 ]

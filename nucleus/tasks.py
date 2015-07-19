@@ -7,6 +7,7 @@ from nltk import sent_tokenize, word_tokenize, pos_tag, ne_chunk
 from nameparser.parser import HumanName
 from pprint import pprint
 
+
 BASE_QUERY = 'https://www.googleapis.com/customsearch/v1?cx=013124516719686669170%3Ahfjkbqcngvw&key=AIzaSyCqVoHi8XHEkPyGQW64HfDdslcdQNxV-VQ&'
 
 @shared_task
@@ -31,7 +32,7 @@ def async_data_scrape(profileId):
 			except Exception as e:
 				print e
 		person.raw_data = json.dumps(results)
-		person.status = 'unrefined'
+		person.status = 0
 		person.save()
 
 def get_human_names(text):
