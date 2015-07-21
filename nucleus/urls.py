@@ -1,10 +1,11 @@
 from django.conf.urls import include, url
 from django.views.generic import RedirectView
 from tastypie.api import Api
-from resources import PersonResource
+from resources import PersonResource, RelationshipResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(PersonResource())
+v1_api.register(RelationshipResource())
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/dashboard/')),

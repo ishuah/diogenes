@@ -1,30 +1,34 @@
 {% extends "nucleus/base_dashboard.html" %}
 
 {% block dashcontent %}
-	<div class="uk-vertical-align uk-height-1-1 uk-width-1-1">
+	<div class="uk-grid uk-height-1-1 uk-width-1-1">
 		<article class="uk-article">
-	    	<h1 class="uk-article-title">View Profile - {{person.name}}</h1>
+	    	<h1 class="uk-article-title">View Profile - </h1>
 	    	<p class="uk-article-meta"></p>
-	    	<p class="uk-article-lead">{{ person.short_description }}</p>
+	    	<p class="uk-article-lead"></p>
 	    
-	   		{% if person.status == 'unexplored' %}
-	   			<p class="uk-article-lead">{{person.name}}'s profile does not have raw data.</p>
-	   			<a href="/dashboard/profile_search/{{ person.pk }}/" class="uk-button uk-button-large uk-button-primary">Collect {{person.name}}'s raw data</a>
-	   		{% endif %}
-	   		{% if raw_data %}
-	   			<div class="uk-block">
-		   				<div class="uk-container">
-		   					{% for item in raw_data.items %}
-		   						<div class="uk-panel uk-panel-hover">
-		   						<h3 class="uk-panel-title"><a href="{{item.link}}" target="_blank">{{item.link}}</a></h3>
-		   						<h4>{{item.snippet}}</h4>
-		   						</div>
-		   					{% endfor %}
-		   				</div>
-	   			</div>
-	   		{% endif %}
+	   		<div class="uk-block">
+   				<div id="relations" class="uk-container">
+   					
+   				</div>
+	   		</div>
 		</article>
 		
 	</div>
-	
+	<script>
+		//Where's me rum?
+		$(function(){
+			$.get('/api/v1/person/?format=json&id={{ profileId }}', function(data){ 
+				  $('.uk-article-title').append(data.objects[0].name);
+				  $('.uk-article-lead').append(data.objects[0].short_description);
+				});
+			$.get('/api/v1/relationship/?format=json&personA={{ profileId }}&limit=0', function(data){ 
+				  for (var i = data.objects.length - 1; i >= 0; i--) {
+				  	$('#relations').append('<div class="uk-panel uk-panel-hover">'+
+		   						'<h3 class="uk-panel-title"><a href="view/'+data.objects[i].personB.pk+'/">'+data.objects[i].personB.name+'</a></h3>'+
+		   					'</div>');
+				  }
+				});
+		});
+	</script>
 {% endblock %}

@@ -32,7 +32,7 @@ def async_data_scrape(profileId):
 			except Exception as e:
 				print e
 		person.raw_data = json.dumps(results)
-		person.status = 0
+		person.status = 2
 		person.save()
 
 def get_human_names(text):

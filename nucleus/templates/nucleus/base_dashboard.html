@@ -30,6 +30,7 @@
 				{% endif %}
 			{% endfor %}
 		{% endif %}
+		{% block dashcontent %}
 		<div class="uk-grid uk-height-1-1">
 		<div class="uk-width-3-4 uk-overflow-container uk-container-center">
 			<div id="bloodhound">
@@ -57,6 +58,7 @@
 			</ul>
 		</div>
 	</div>
+	{% endblock %}
 	</div>
 	<script src="/static/js/blackbeard.js"></script>
 {%endblock%}

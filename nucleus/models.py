@@ -8,7 +8,7 @@ CHOICES = (
 	)
 
 class Person(Document):
-	name = StringField(required=True, max_length=200)
+	name = StringField(required=True, max_length=200, unique=True)
 	image = ImageField()
 	short_description = StringField(max_length=500)
 	tags = ListField(StringField(max_length=50))

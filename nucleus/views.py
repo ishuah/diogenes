@@ -10,7 +10,7 @@ import urllib, requests, json
 @login_required(login_url='/login/')
 def dashboard(request):
 	people = Person.objects.all()
-	return render(request, 'nucleus/base_dashboard.html', {'people': people})
+	return render(request, 'nucleus/base_dashboard.html')
 
 @login_required(login_url='/login/')
 def add_person_profile(request):
@@ -30,11 +30,7 @@ def delete_profile(request, profileId):
 
 @login_required(login_url='/login/')
 def view_profile(request, profileId):
-	person = Person.objects.get(pk=profileId)
-	if person.raw_data:
-		raw_data = json.loads(person.raw_data)
-		return render(request, 'nucleus/dashboard_view_profile.html', {'person': person, 'raw_data': raw_data})
-	return render(request, 'nucleus/dashboard_view_profile.html', {'person': person} )
+	return render(request, 'nucleus/dashboard_view_profile.html', {'profileId': profileId } )
 
 @login_required(login_url='/login/')
 def profile_search(request, profileId):

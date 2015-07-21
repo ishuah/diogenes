@@ -57,39 +57,39 @@ $('#bloodhound .typeahead').typeahead({
     });
 
 
-$.get('/api/v1/person/?format=json', function(data){ 
+$.get('/api/v1/person/?format=json&limit=0', function(data){ 
   for (var i = data.objects.length - 1; i >= 0; i--) {
     if (data.objects[i].status == 0)
       $('#unqueued').append('<div class="uk-width-medium-1-1">'+
-                            '<div class="uk-panel uk-panel-box">'+
+                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
                               '<h3 class="uk-panel-title">'+
                                 data.objects[i].name +
                               '</h3>'+
-                            '</div>'+
+                            '</a>'+
                             '</div>');
     else if (data.objects[i].status == 1)
       $('#queued').append('<div class="uk-width-medium-1-1">'+
-                            '<div class="uk-panel uk-panel-box">'+
+                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
                               '<h3 class="uk-panel-title">'+
                                 data.objects[i].name +
                               '</h3>'+
-                            '</div>'+
+                            '</a>'+
                             '</div>');
     else if (data.objects[i].status == 2)
       $('#unrefined').append('<div class="uk-width-medium-1-1">'+
-                            '<div class="uk-panel uk-panel-box">'+
+                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
                               '<h3 class="uk-panel-title">'+
                                 data.objects[i].name +
                               '</h3>'+
-                            '</div>'+
+                            '</a>'+
                             '</div>');
     else if (data.objects[i].status == 3)
       $('#refined').append('<div class="uk-width-medium-1-1">'+
-                            '<div class="uk-panel uk-panel-box">'+
+                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
                               '<h3 class="uk-panel-title">'+
                                 data.objects[i].name +
                               '</h3>'+
-                            '</div>'+
+                            '</a>'+
                             '</div>');
   };
 });
