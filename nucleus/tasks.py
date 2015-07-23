@@ -8,7 +8,7 @@ from nameparser.parser import HumanName
 from pprint import pprint
 
 
-BASE_QUERY = 'https://www.googleapis.com/customsearch/v1?cx=013124516719686669170%3Ahfjkbqcngvw&key=AIzaSyCqVoHi8XHEkPyGQW64HfDdslcdQNxV-VQ&'
+BASE_QUERY = 'https://www.googleapis.com/customsearch/v1?cx=013124516719686669170%3Ahfjkbqcngvw&key=AIzaSyCTMJ7wZtHSqYg6-fOS2r2HpoWPSI_a5jc&'
 
 @shared_task
 def async_data_scrape(profileId):
