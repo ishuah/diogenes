@@ -5,7 +5,7 @@ $(function(){
 }
 
 suggestion = function(data){
-            return '<div><a href="'+data.resource_uri+'">'+data.name+'</a></div>';
+            return '<div><a onclick="fetchData(\''+data.id+'\')">'+data.name+'</a></div>';
         }
 
 newprofile = function(query){
@@ -20,11 +20,25 @@ newprofile = function(query){
     .done(function(data){
         $('.typeahead').typeahead('val', '');
         UIkit.notify("<i class='uk-icon-plus-square'></i> Profile created successfully", {status:'success'});
+        fillData(JSON.parse(data));
     })
     .fail(function()  {
         UIkit.modal.alert("Something went wrong!");
       }); 
   });
+}
+
+fetchData = function(profileId){
+  $.get('/api/v1/person/?format=json&id='+profileId, function(data){
+          $('.typeahead').typeahead('val', '');
+          fillData(data.objects[0]);
+        });
+}
+
+fillData = function(data){
+  $('#profile h1.uk-article-title').text(data.name);
+  console.log(data.name);
+  $('#profile').show();
 }
 
 var profiles = new Bloodhound({
@@ -37,7 +51,8 @@ var profiles = new Bloodhound({
             return $.map(profiles.objects, function (profile) {
                 return profile;
             });
-        }
+        },
+        cache: false
     }
 });
 
@@ -56,41 +71,4 @@ $('#bloodhound .typeahead').typeahead({
         }
     });
 
-
-$.get('/api/v1/person/?format=json&limit=0', function(data){ 
-  for (var i = data.objects.length - 1; i >= 0; i--) {
-    if (data.objects[i].status == 0)
-      $('#unqueued').append('<div class="uk-width-medium-1-1">'+
-                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
-                              '<h3 class="uk-panel-title">'+
-                                data.objects[i].name +
-                              '</h3>'+
-                            '</a>'+
-                            '</div>');
-    else if (data.objects[i].status == 1)
-      $('#queued').append('<div class="uk-width-medium-1-1">'+
-                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
-                              '<h3 class="uk-panel-title">'+
-                                data.objects[i].name +
-                              '</h3>'+
-                            '</a>'+
-                            '</div>');
-    else if (data.objects[i].status == 2)
-      $('#unrefined').append('<div class="uk-width-medium-1-1">'+
-                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
-                              '<h3 class="uk-panel-title">'+
-                                data.objects[i].name +
-                              '</h3>'+
-                            '</a>'+
-                            '</div>');
-    else if (data.objects[i].status == 3)
-      $('#refined').append('<div class="uk-width-medium-1-1">'+
-                            '<a href="view/'+data.objects[i].id+'" class="uk-panel uk-panel-hover">'+
-                              '<h3 class="uk-panel-title">'+
-                                data.objects[i].name +
-                              '</h3>'+
-                            '</a>'+
-                            '</div>');
-  };
-});
 });

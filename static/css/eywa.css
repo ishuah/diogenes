@@ -199,3 +199,7 @@ p + p {
 .twitter-typeahead{
   width: 100%;
 }
+
+#profile {
+  display: none;
+}

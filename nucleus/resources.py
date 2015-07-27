@@ -9,6 +9,7 @@ class PersonResource(resources.MongoEngineResource):
 	class Meta:
 		queryset = Person.objects.all()
 		authorization = Authorization()
+		always_return_data = True
 		resource_name = 'person'
 		filtering = {
 			"name": ALL,
@@ -17,7 +18,7 @@ class PersonResource(resources.MongoEngineResource):
 
 	def obj_create(self, bundle, request = None, **kwargs):
 		bundle = super(PersonResource, self).obj_create(bundle, request=request, **kwargs)
-		async_data_scrape.apply_async((bundle.obj.id,))
+		#async_data_scrape.apply_async((bundle.obj.id,))
 		return bundle
 
 class RelationshipResource(resources.MongoEngineResource):
