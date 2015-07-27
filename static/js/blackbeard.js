@@ -1,8 +1,9 @@
 //Aye aye captain
 $(function(){
-  notFound = function (data) {
+
+notFound = function (data) {
     return '<div id="notfound"><a onclick="newprofile(\''+data.query.replace(/'/g, "\\'")+'\');"><i class="uk-icon-plus-square"></i> Create a profile for '+data.query+'</a></div>';
-}
+  }
 
 suggestion = function(data){
             return '<div><a onclick="fetchData(\''+data.id+'\')">'+data.name+'</a></div>';
@@ -36,10 +37,50 @@ fetchData = function(profileId){
 }
 
 fillData = function(data){
+  $('input[name=profileId]').val(data.id);
   $('#profile h1.uk-article-title').text(data.name);
-  console.log(data.name);
+  $('#profile img.uk-thumbnail').attr('src', '/profile/image/'+data.id+'/');
   $('#profile').show();
 }
+
+var progressbar = $("#progressbar"),
+    bar         = progressbar.find('.uk-progress-bar'),
+    settings    = {
+
+    actionUrl: '/dashboard/upload_image/', // upload url
+
+    allow : '*.(jpg|jpeg|gif|png)', // allow only images
+
+    loadstart: function() {
+        bar.css("width", "0%").text("0%");
+        progressbar.removeClass("uk-hidden");
+    },
+
+    progress: function(percent) {
+        percent = Math.ceil(percent);
+        bar.css("width", percent+"%").text(percent+"%");
+    },
+
+    allcomplete: function(response) {
+
+        bar.css("width", "100%").text("100%");
+
+        setTimeout(function(){
+            progressbar.addClass("uk-hidden");
+        }, 250);
+
+        $('#profile img.uk-thumbnail').attr('src', '/profile/image/'+$('input[name=profileId]').val()+'/?'+ + new Date().getTime());
+        UIkit.notify("<i class='uk-icon-plus-square'></i> Upload completed", {status:'success'});
+    },
+
+    before: function(settings, files){
+      settings.action = settings.actionUrl+$('input[name=profileId]').val()+'/';
+      console.log(files);
+    }
+};
+
+var select = UIkit.uploadSelect($("#upload-select"), settings),
+    drop   = UIkit.uploadDrop($("#upload-drop"), settings);
 
 var profiles = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.whitespace,

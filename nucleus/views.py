@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.http import HttpResponse
 from nucleus.models import Person
@@ -12,28 +13,21 @@ def dashboard(request):
 	people = Person.objects.all()
 	return render(request, 'nucleus/base_dashboard.html')
 
+@csrf_exempt
 @login_required(login_url='/login/')
-def add_person_profile(request):
-	if request.method == "POST":
-		Person.objects.create(name=request.POST.get("name"), short_description=request.POST.get("short_description"))
-		return render(request, 'nucleus/dashboard_new_profile.html')
-	return render(request, 'nucleus/dashboard_new_profile.html')
+def upload_image(request, profileId):
+	if request.method == 'POST':
+		profile = Person.objects.get(pk=profileId)
+		profile.image = request.FILES.get('files[]')
+		profile.save()
+		return HttpResponse(request, status=201)
 
 @login_required(login_url='/login/')
-def delete_profile(request, profileId):
-	if request.method == "POST":
-		Person.objects.get(pk=profileId).delete()
-		return redirect('dashboard')
-	else:
-		person = Person.objects.get(pk=profileId)
-		return render(request, 'nucleus/dashboard_confirm_profile_delete.html', {'person': person})
+def profile_image(request, profileId):
+	profile = Person.objects.get(pk=profileId)
+	if profile.image:
+		return HttpResponse(profile.image.read(), content_type="image/png")
+	image = open('static/img/placeholder_200x200.svg')
+	return HttpResponse(image.read(), content_type="image/svg+xml")
 
-@login_required(login_url='/login/')
-def view_profile(request, profileId):
-	return render(request, 'nucleus/dashboard_view_profile.html', {'profileId': profileId } )
-
-@login_required(login_url='/login/')
-def profile_search(request, profileId):
-	async_data_scrape.apply_async((profileId,))
-	return HttpResponse(status=200)
 

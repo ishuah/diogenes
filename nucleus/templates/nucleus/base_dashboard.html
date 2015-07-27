@@ -38,9 +38,19 @@
 			</div>
 
 			<div id="profile" class="uk-grid uk-height-1-1 uk-width-1-1">
+				<input type="hidden" name="profileId" value="" />
 				<article class="uk-article uk-height-1-1 uk-width-1-1">
 					<div class="uk-block">
-						<img class="uk-thumbnail uk-float-left uk-margin-right" src="http://getuikit.com/docs/images/placeholder_200x200.svg" width="200" height="200" alt="">
+						<div class="uk-float-left uk-margin-right uk-margin-top-remove">
+							<img class="uk-thumbnail " src="http://getuikit.com/docs/images/placeholder_200x200.svg" width="200" height="200" alt="">
+
+							<div id="upload-drop" class="uk-placeholder">
+								<a class="uk-form-file">Upload image<input id="upload-select" type="file"></a>.
+							</div>
+							<div id="progressbar" class="uk-progress uk-hidden">
+							    <div class="uk-progress-bar" style="width: 0%;">...</div>
+							</div>
+						</div>
 			    		<h1 class="uk-article-title"></h1>
 			    		<p class="uk-article-meta">Current occupation information not available</p>
 					</div>
