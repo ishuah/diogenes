@@ -3,10 +3,21 @@ requirejs.config({
     paths: {
         jquery: 'jquery-1.11.3.min',
         bloodhound: 'typehead/bloodhound.min',
-        typeahead: 'typehead/typeahead.jquery.min'
-
+        typeahead: 'typehead/typeahead.jquery.min',
+        UIkit: 'uikit.min',
+        upload: 'components/upload.min',
+        notify: 'components/notify.min'
     },
-    shim: { 
+    shim: {
+        'UIkit':{
+          'deps': ['jquery']
+        },
+        'upload':{
+          'deps': ['UIkit']
+        },
+        'notify': {
+          'deps': ['UIkit']
+        },
         'bloodhound': {
             'deps': ['jquery'],
             exports: 'Bloodhound'
@@ -17,7 +28,7 @@ requirejs.config({
         }
     }
 });
-requirejs(['jquery', 'uikit.min', 'components/notify.min', 'components/upload.min', 'typeahead' , 'bloodhound' ],
+requirejs(['jquery', 'UIkit' , 'notify', 'upload', 'typeahead' , 'bloodhound' ],
 function($) {
     notFound = function (data) {
         return '<div id="notfound"><a onclick="newprofile(\''+data.query.replace(/'/g, "\\'")+'\');"><i class="uk-icon-plus-square"></i> Create a profile for '+data.query+'</a></div>';
@@ -104,7 +115,6 @@ function($) {
 
         before: function(settings, files){
           settings.action = settings.actionUrl+$('input[name=profileId]').val()+'/';
-          console.log(files);
         }
     };
 
