@@ -40,6 +40,17 @@ fillData = function(data){
   $('input[name=profileId]').val(data.id);
   $('#profile h1.uk-article-title').text(data.name);
   $('#profile img.uk-thumbnail').attr('src', '/profile/image/'+data.id+'/');
+
+  if(data.short_description)
+    $('#profile p.uk-article-meta').text(data.short_description);
+  else
+    $('#profile p.uk-article-meta').text("Current occupation information not available");
+
+  if(data.refined_data)
+    $('#profile').append(data.refined_data);
+  else
+    $('#profile p.uk-article-lead').text("Short Description not available");
+
   $('#profile').show();
 }
 
