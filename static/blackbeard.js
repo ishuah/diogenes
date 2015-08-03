@@ -6,7 +6,9 @@ requirejs.config({
         typeahead: 'typehead/typeahead.jquery.min',
         UIkit: 'uikit.min',
         upload: 'components/upload.min',
-        notify: 'components/notify.min'
+        notify: 'components/notify.min',
+        htmleditor: 'components/htmleditor',
+        marked: 'marked.min'
     },
     shim: {
         'UIkit':{
@@ -18,6 +20,12 @@ requirejs.config({
         'notify': {
           'deps': ['UIkit']
         },
+        'marked': {
+          exports: 'marked'
+        },
+        'htmleditor': {
+          'deps': ['UIkit', 'marked']
+        },
         'bloodhound': {
             'deps': ['jquery'],
             exports: 'Bloodhound'
@@ -28,8 +36,14 @@ requirejs.config({
         }
     }
 });
-requirejs(['jquery', 'UIkit' , 'notify', 'upload', 'typeahead' , 'bloodhound' ],
-function($) {
+requirejs(['jquery', 'marked', 'codemirror/lib/codemirror', 'codemirror/mode/markdown/markdown', 'codemirror/addon/mode/overlay', 'codemirror/mode/xml/xml', 'codemirror/mode/gfm/gfm' , 'UIkit','notify', 'upload', 'typeahead' , 'bloodhound',  'htmleditor' ],
+function($, marked, CodeMirror) {
+    window.UIkit = UIkit;
+    console.log(UIkit);
+    window.CodeMirror = CodeMirror;
+    window.marked = marked;
+    
+
     notFound = function (data) {
         return '<div id="notfound"><a onclick="newprofile(\''+data.query.replace(/'/g, "\\'")+'\');"><i class="uk-icon-plus-square"></i> Create a profile for '+data.query+'</a></div>';
     }
@@ -58,6 +72,23 @@ function($) {
           });
         }
 
+    editProfile = function(refined_data){
+      $.ajax({
+              url:'/api/v1/person/'+$('input[name=profileId]').val()+'/',
+              type:"PATCH",
+              data: JSON.stringify({refined_data:refined_data}),
+              contentType:"application/json; charset=utf-8",
+              dataType:"text"
+            })
+            .done(function(data){
+                $('.typeahead').typeahead('val', '');
+                UIkit.notify("<i class='uk-icon-plus-square'></i> Profile updated successfully", {status:'success'});
+            })
+            .fail(function()  {
+                UIkit.modal.alert("Something went wrong!");
+              }); 
+    }
+
     fetchData = function(profileId){
       $.get('/api/v1/person/?format=json&id='+profileId, function(data){
               $('.typeahead').typeahead('val', '');
@@ -66,6 +97,7 @@ function($) {
     }
 
     fillData = function(data){
+      var editor = $('.CodeMirror')[0].CodeMirror;
       $('input[name=profileId]').val(data.id);
       $('#profile h1.uk-article-title').text(data.name);
       $('#profile img.uk-thumbnail').attr('src', '/profile/image/'+data.id+'/');
@@ -75,11 +107,15 @@ function($) {
       else
         $('#profile p.uk-article-meta').text("Current occupation information not available");
 
-      if(data.refined_data)
-        $('#profile p.uk-article-lead').text(data.refined_data);
-      else
-        $('#profile p.uk-article-lead').text("Short Description not available");
-
+      if(data.refined_data){
+        $('#refined_data').html(data.refined_data);
+        editor.setValue(data.refined_data);
+      }
+      else{
+        $('#refined_data').html("<p  class=uk-article-lead'>Short Description not available</p>");
+        editor.setValue("<p  class=uk-article-lead'>Short Description not available</p>");
+      }
+      editor.refresh();
       $('#profile').show();
     }
 
@@ -150,6 +186,30 @@ function($) {
             suggestion: suggestion,
             notFound: notFound
         }
+    });
+
+    $('#edit').on('click', function(e){
+      if($('#profile .editor').is(':visible')){
+        var editor = $('.CodeMirror')[0].CodeMirror;
+        $('#refined_data').html(editor.getValue());
+        editProfile(editor.getValue());
+        $('#profile .editor').hide();
+        $('#cancel').hide();
+        $('#refined_data').show();
+        $(this).text('Edit');
+      } else {
+        $('#profile .editor').show();
+        $('#cancel').show();
+        $('#refined_data').hide();
+        $(this).text('Save');
+      }
+    });
+
+    $('#cancel').on('click', function(e){
+        $('#profile .editor').hide();
+        $('#cancel').hide();
+        $('#refined_data').show();
+        $('#edit').text('Edit');
     });
 
 });

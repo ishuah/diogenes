@@ -1,2 +1,1 @@
-- Fix JS dependencies, clean blackbeard.js 
 - Write jquery in place editing plugin

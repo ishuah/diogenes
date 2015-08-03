@@ -203,3 +203,11 @@ p + p {
 #profile {
   display: none;
 }
+
+#profile .editor {
+  display: none;
+}
+
+#cancel {
+  display: none;
+}
